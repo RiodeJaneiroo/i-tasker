@@ -1,0 +1,7 @@
+.sidebar .nav-link {
+	display: flex;
+	align-items: center;
+}
+.sidebar svg {
+	margin-right: 5px;
+}
