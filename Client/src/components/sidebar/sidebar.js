@@ -12,7 +12,13 @@ const Sidebar = () => {
 					<li className="nav-item">
 						<NavLink className="nav-link" activeClassName="active" to="/" exact>
 							<Icon.Home size="14"/>
-							Dashboard
+							Задачи
+						</NavLink>
+					</li>
+					<li className="nav-item">
+						<NavLink className="nav-link" to="/project" exact>
+							<Icon.Folder size="14"/>
+							Проекты
 						</NavLink>
 					</li>
 					<li className="nav-item">

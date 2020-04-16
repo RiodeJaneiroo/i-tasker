@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import * as Icon from 'react-feather';
 import { Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { taskAdded } from '../../actions';
+import { fetchTaskAdd } from '../../actions/task-actions';
+import { bindActionCreators } from 'redux';
+import { withTaskService } from '../hoc';
+import { compose } from '../../utils';
+
 
 class AddTaskPage extends Component {
 	state = {
@@ -14,13 +18,12 @@ class AddTaskPage extends Component {
 		e.preventDefault();
 		const { title, project, descr } = this.state;
 		const task = {
-			id: 10,
 			title,
 			project,
 			descr
 		};
-		this.props.taskAdded(task);
-
+		
+		this.props.fetchTaskAdd(task);
 	};
 
 	handleChanges = (el, name) => {
@@ -33,6 +36,9 @@ class AddTaskPage extends Component {
 		const { sumbitAddTask, handleChanges } = this;
 		return (
 			<Container>
+				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<h1 className="h2">Новая задача</h1>
+				</div>
 				<Row>
 					<Col sm={6}>
 						<form onSubmit={sumbitAddTask}>
@@ -77,7 +83,15 @@ class AddTaskPage extends Component {
 const mapStateToProps = ({ tasks }) => {
 	return { tasks };
 };
-const mapDispatchToProps = {
-	taskAdded
-}
-export default connect(mapStateToProps, mapDispatchToProps)(AddTaskPage);
+
+const mapDispatchToProps = (dispatch, { taskService }) => {
+	return bindActionCreators({
+		fetchTaskAdd: (task) => fetchTaskAdd(taskService, task)()
+	}, dispatch)
+};
+
+export default compose(
+	withTaskService(),
+	connect(mapStateToProps, mapDispatchToProps)
+ )(AddTaskPage);
+ 

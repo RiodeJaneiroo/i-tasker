@@ -1,41 +1,42 @@
+import { FETCH_TASKLIST_REQUEST, FETCH_TASKLIST_SUCCESS, FETCH_TASKLIST_FAILURE, FETCH_TASK_REMOVE_SUCCESS} from '../actions/task-actions';
+
 const updateTaskList = (state, action) => {
 	
 	if(state === undefined) {
 		return {
-			tasks: [],
+			items: [],
 			loading: true,
 			error: null
 		};
 	}
 	switch(action.type) {
-		case 'FETCH_TASKS_REQUEST':
+		case FETCH_TASKLIST_REQUEST:
 			return {
-				tasks: [],
+				items: [],
 				loading: true,
 				error: null
 			}
-		case 'FETCH_TASKS_SUCCESS':
+		case FETCH_TASKLIST_SUCCESS:
 			return {
-				tasks: action.payload,
+				items: action.payload,
 				loading: false,
 				error: null
 			};
-		case 'FETCH_TASKS_FAILURE':
+		case FETCH_TASKLIST_FAILURE:
 			return {
-				tasks: [],
+				items: [],
 				loading: false,
 				error: action.payload
 			}
-		// case 'TASK_ADDED':
-
-		// 	let id = state.tasks.length + 1;
-		// 	return {
-		// 		...state.taskList,
-		// 		tasks: [
-		// 			...state.taskList.tasks,
-		// 			{ ...action.payload, id}
-		// 		]
-		// 	}
+		case FETCH_TASK_REMOVE_SUCCESS:
+			const { items } = state.taskList;
+			const newItems = items.filter(item => item._id !== action.payload);
+			return {
+				items: newItems,
+				loading: false,
+				error: null
+			}
+			
 		default:
 			return state.taskList;
 	}

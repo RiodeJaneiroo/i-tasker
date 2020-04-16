@@ -1,0 +1,16 @@
+{
+	"env": {
+		"es6": true,
+		"node": true,
+		"browser": true
+	},
+	"extends": "airbnb/base",
+	"rules": {
+		"indent": [3, "tab"],
+		"no-tabs": "off"
+	},
+	"exclude": [
+		"node_modules",
+		"**/node_modules/*"
+  ]
+}

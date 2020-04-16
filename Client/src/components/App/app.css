@@ -114,3 +114,41 @@ body {
 .feather {
   margin-right: 4px;
 }
+
+.c-editor-container a:hover,
+.table a:hover {
+  background: linear-gradient(90deg, #ff720f, #007bfe);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  text-shadow: none;
+  transition: all 0.4s;
+
+}
+.spinner-border {
+  margin: 40px auto;
+  display: block;
+}
+.bTable td {
+  vertical-align: middle;
+  padding: 0.5rem;
+}
+.bTable__control {
+  width: 150px;
+}
+.bControl {
+  width: 150px;
+}
+.bControl__btn {
+  transition: opacity 0.3s;
+  margin: 0 4px;
+  display: inline-flex;
+  align-items: center;
+}
+.bTable__td .bControl__btn {
+  opacity: 0;
+}
+.bTable__td:hover .bControl__btn {
+  opacity: 1;
+}

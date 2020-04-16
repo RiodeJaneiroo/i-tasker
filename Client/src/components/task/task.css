@@ -13,3 +13,33 @@
 .bComment .card-body{
 	padding: 0.9rem;
 }
+.table {
+	transition: 0.7s;
+}
+.bLoading {
+	overflow: hidden;
+}
+.bLoading_active .table {
+	filter: blur(5px);
+}
+.bLoading__title {
+	display: block;
+	width: 100%;
+	min-height: 38px;
+	display: flex;
+	align-items: center;
+	transition: 0.8s;
+}
+
+.bLoading__title.bLoading_active:before {
+	content: '';
+	display: block;
+	height: 20px;
+	width: 30%;
+	background-color: rgba(0, 0, 0, 0.13);
+	margin-top: 6px;
+}
+.externalLinkProject {
+	padding-left: 8px;
+	color: #ff720f;
+}

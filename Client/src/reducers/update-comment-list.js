@@ -1,3 +1,5 @@
+import { FETCH_COMMENTS_REQUEST, FETCH_COMMENTS_SUCCESS, FETCH_COMMENTS_FAILURE } from '../actions/task-actions';
+
 const updateCommentList = (state, action) => {
 	if(state === undefined) {
 		return {
@@ -8,19 +10,19 @@ const updateCommentList = (state, action) => {
 	}
 	
 	switch(action.type) {
-		case 'FETCH_COMMENTS_REQUEST':
+		case FETCH_COMMENTS_REQUEST:
 			return {
 				comments: [],
 				loading: true,
 				error: null
 			}
-		case 'FETCH_COMMENTS_SUCCESS':
+		case FETCH_COMMENTS_SUCCESS:
 			return {
 				comments: action.payload,
 				loading: false,
 				error: null
 			};
-		case 'FETCH_COMMENTS_FAILURE':
+		case FETCH_COMMENTS_FAILURE:
 			return {
 				comments: [],
 				loading: false,

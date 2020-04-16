@@ -1,21 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import TaskListItem from '../task-list-item';
-import { withTaskService } from '../hoc';
-import { connect } from 'react-redux';
-import { compose } from '../../utils';
-import { fetchTasks } from '../../actions';
 
+import { useFetchData } from '../../utils';
+import { fetchTasks } from '../../actions/task-actions';
+import ErrorIndicator from '../error-indicator';
+
+
+import { Link } from 'react-router-dom';
+import * as Icon from 'react-feather';
 import { Spinner } from 'react-bootstrap';
 
 const TaskList = ({tasks}) => {
+
 	return (
-		<table className="table table-hover">
+		<div>
+			<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+				<h1 className="h2">Список задач</h1>
+				<Link to="/task-add" className="btn btn-primary">
+					
+					<Icon.Plus size="14" />
+					Добавить задачу
+				</Link>
+			</div>
+
+		<table className="table table-hover bTable">
 			<thead className="thead-dark">
 			<tr>
-				<th scope="col">#</th>
 				<th scope="col">Название</th>
 				<th scope="col">Проект</th>
 				<th scope="col">Время</th>
+				<th scope="col"></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -24,39 +38,19 @@ const TaskList = ({tasks}) => {
 				}
 			</tbody>
 		</table>
+		</div>
 	);
 }
+const TaskListContainer = () => {
 
-class TaskListContainer extends Component {
-	componentDidMount() {
-		this.props.fetchTasks();
+	const { items, loading, error } = useFetchData(fetchTasks, state => state.taskList);
+	
+	if(loading || error) {
+		return loading ? <Spinner animation="border" /> : <ErrorIndicator msg={error} />;
 	}
-	render() {
-		const { tasks, loading, error } = this.props;
-		
-		if(loading) {
-			return <Spinner animation="border" />;
-		}
-		if(error) {
-			return <div>error !!!</div>
-		}
+	return <TaskList tasks={items} />
+}
 
-		return <TaskList tasks={tasks} />
-		
-	}
-};
 
-const mapStateToProps = ({ taskList: { tasks, loading, error } }) => {
-	return { tasks, loading, error };
-};
-const mapDispatchToProps = (dispatch, { taskService }) => {
-	return {
-		fetchTasks: fetchTasks(dispatch, taskService)
-	}
-};
-
-export default compose(
-	withTaskService(),
-	connect(mapStateToProps, mapDispatchToProps)
- )(TaskListContainer);
+export default TaskListContainer;
  

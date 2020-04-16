@@ -1,110 +1,88 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { withTaskService } from '../hoc';
-import { connect } from 'react-redux';
-import { compose } from '../../utils';
-import { fetchTask } from '../../actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchTask } from '../../actions/task-actions';
+import { Link } from 'react-router-dom';
+import ErrorIndicator from '../error-indicator';
 
-
+import TaskControl from '../task-control';
+import { formatDate } from '../../utils';
 import * as Icon from 'react-feather';
-import { Tab, Nav, Col, Row, Card } from 'react-bootstrap';
+import { Table, Spinner, Alert } from 'react-bootstrap';
+import TaskFooter from './task-footer';
+import TaskBody from './task-body';
+import DraftEditor from '../draft-editor';
+
 
 import './task.css';
 
-class Task extends Component {
-	componentDidMount() {
-		this.props.fetchTask();
-	}
-	render() {
-		return (
-			<div className="row">
-				<div className="col-8">
-					<div className="card rounded-0 mb-3 bAddTask__box">
-						<button type="button" className="btn btn-secondary btn-sm bAddTask__done">
-							<Icon.Check size="18"/>
-						</button>
-						<div className="card-body">
-							<h5 className="card-title">Special title treatment</h5>
-							<p className="card-text">Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!</p>
-							<p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-						</div>
-					</div>
-					<div className="card rounded-0 mb-3 bAddTask__box">
-						<div className="btn btn-success disabled btn-sm bAddTask__done">Решено</div>
-						<div className="card-body">
-							<h5 className="card-title">Special title treatment</h5>
-							<p className="card-text">Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!</p>
-							<p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-						</div>
-					</div>
-					<hr className="mt-5"/>
-					<Tab.Container id="left-tabs-example" defaultActiveKey="first">
-						<Row>
-							<Col sm={3}>
-								<Nav variant="pills" className="flex-column">
-									<Nav.Item>
-										<Nav.Link eventKey="first">Комментарии</Nav.Link>
-									</Nav.Item>
-									<Nav.Item>
-										<Nav.Link eventKey="second">Время</Nav.Link>
-									</Nav.Item>
-								</Nav>
-							</Col>
-							<Col sm={9}>
-								<Tab.Content>
-								<Tab.Pane eventKey="first">
-									
-									<Card className="bComment mb-2">
-										<Card.Body>
-											<div className="scard-title h6">Вадим Змиевский <small className="text-muted bCoomentDate">23.02 20:06</small></div>
-											<hr />
-											<Card.Text>
-												+800 руб.
-											</Card.Text>
-										</Card.Body>
-									</Card>
-									<Card className="bComment mb-2">
-										<Card.Body>
-											<div className="scard-title h6">Вадим Змиевский <small className="text-muted bCoomentDate">23.02 20:06</small></div>
-											<hr />
-											<Card.Text>
-												Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!
-											</Card.Text>
-										</Card.Body>
-									</Card>
-								</Tab.Pane>
-								<Tab.Pane eventKey="second">
-									<p>Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!</p>
-									<p>Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!</p>
-								</Tab.Pane>
-								</Tab.Content>
-							</Col>
-						</Row>
-					</Tab.Container>
-					
-				</div>
-				<div className="col-4">
-					<div className="jumbotron jumbotron-fluid">
-						<div className="container">
-							<h4>Fluid jumbotron</h4>
-							<p className="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-						</div>
-					</div>
+const Task = ({ task }) => {
+	const { title, createAt, modifyAt, projectId, content, project, _id } = task;
+
+	return (
+		<div className="row">
+			<div className="col-12">
+				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<h1 className="h2">{title}</h1>
+					<TaskControl taskId={_id}/>
 				</div>
 			</div>
-		)
-	}
-};
-const mapStateToProps = ({commentList: { comments, loading, error}}) => {
-	return { comments, loading, error };
-};
-const mapDispatchToProps = (dispatch, { taskService }) => {
-	return {
-		fetchTask: fetchTask(dispatch, taskService)
-	}
-};
+			<div className="col-8">
+				<DraftEditor content={content} readOnly={true} />
+				<TaskFooter />
+				<TaskBody />
+			</div>
+			<div className="col-4">
+				<Table striped bordered hover variant="dark">
+					<tbody>
+						<tr>
+							<td>Крайний срок:</td>
+							<td>12.07.2025, 12:05</td>
+						</tr>
+						<tr>
+							<td>Важность:</td>
+							<td><span role="img" aria-label="fire">🔥 🔥 🔥</span></td>
+						</tr>
+						<tr>
+							<td>Проект:</td>
+							<td>
+								<Link to={`/project/${projectId}`}>{project.title}</Link>
 
-export default compose(
-	withTaskService(),
-	connect(mapStateToProps, mapDispatchToProps)
- )(Task);
+								<a rel="noopener noreferrer" target="_blank" className="externalLinkProject" href={project.url}>
+									<Icon.ExternalLink size="18" />
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td>Создано:</td>
+							<td>{formatDate(createAt)}</td>
+						</tr>
+						<tr>
+							<td>Изменено:</td>
+							<td>{formatDate(modifyAt)}</td>
+						</tr>
+					</tbody>
+				</Table>
+			</div>
+		</div>
+	);
+};
+const TaskContainer = ({ match, location }) => {
+
+	const dispatch = useDispatch();
+	const { item, loading, error } = useSelector(state => state.task);
+
+	useEffect(() => {
+		const { id } = match.params;
+		fetch(dispatch, id);
+	}, [dispatch, match.params]);
+
+
+	if(error || loading) {
+		return loading ? <Spinner animation="border" /> : <ErrorIndicator msg={error} />
+	}
+
+	return <Task task={item} />
+}
+
+export default TaskContainer;
