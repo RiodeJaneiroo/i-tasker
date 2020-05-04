@@ -2,7 +2,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchTaskRemove } from '../../actions/task-actions';
 import { useHistory } from 'react-router-dom';
-
+import { notificationAdd } from '../../actions/notify-actions';
+import PropTypes from 'prop-types';
 
 import { Button } from 'react-bootstrap';
 import * as Icon from 'react-feather';
@@ -21,8 +22,12 @@ const TaskControl = ({ taskId }) => {
 	const onDeleted = () => {
 		const confirmDelete = window.confirm('Вы действительно хотите удалить задачу ?');
 		if(confirmDelete) {
-			fetchTaskRemove(dispatch, taskId);
-			history.push("/");
+			fetchTaskRemove(dispatch, taskId)
+				.then(({ type }) => {
+					console.log(type);
+					notificationAdd(dispatch, {text: "Задача удалена!"});
+					history.push("/");
+				});
 		}
 	}
 	return (
@@ -51,5 +56,7 @@ const TaskControl = ({ taskId }) => {
 		</div>
 	)
 };
-
+TaskControl.protoTypes = {
+	taskId: PropTypes.String
+}
 export default TaskControl;

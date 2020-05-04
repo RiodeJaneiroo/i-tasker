@@ -50,7 +50,7 @@ const Project = ({ project, renderContent }) => {
 	);
 };
 
-const ProjectContainer = ({ match, location }) => {
+const ProjectContainer = ({ match }) => {
 
 	const dispatch = useDispatch();
 	const { item, loading, error } = useSelector(state => state.project);
@@ -69,7 +69,7 @@ const ProjectContainer = ({ match, location }) => {
 		<Project
 			project={item}
 			loading={loading}
-			renderContent={<DraftEditor content={item.body} readOnly={false} />} />
+			renderContent={<DraftEditor content={item.body} readOnly={true} />} />
 	);
 };
 

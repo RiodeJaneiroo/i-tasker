@@ -1,14 +1,16 @@
 import React from 'react';
 import ProjectListItem from '../project-list-item';
 import { fetchProjectList } from '../../actions/project-actions';
-import { useFetchData } from '../../utils';
+import { useFetchData } from '../../custom-hooks';
+import PropTypes from 'prop-types';
+import ErrorIndicator from '../error-indicator';
+
 
 import { Link } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import { Spinner } from 'react-bootstrap';
 
-const ProjectList = ({projectList = []}) => {
-
+const ProjectList = ({ projectList }) => {
 	return (
 		<div>
 			<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -37,15 +39,18 @@ const ProjectList = ({projectList = []}) => {
 		</div>
 	);
 }
+ProjectList.propTypes = {
+	projectList: PropTypes.arrayOf(PropTypes.object)
+}
 
 const ProjectListContainer = () => {
 
 	const { items, loading, error } = useFetchData(fetchProjectList, state => state.projectList);
 
-	
 	if(loading || error) {
-		return loading ? <Spinner animation="border" /> : <div>error !</div>;
+		return loading ? <Spinner animation="border" /> : <ErrorIndicator msg={error} />;
 	}
+
 	return <ProjectList projectList={items} />
 };
 

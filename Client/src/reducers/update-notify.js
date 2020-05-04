@@ -15,6 +15,12 @@ const updateNotify = (state, action) => {
 			return notifications;
 
 		case NOTIFICATION_REMOVE:
+			const idx = state.notify.findIndex(el => el.id === action.payload);
+
+			return [
+				...state.notify.slice(0, idx),
+				...state.notify.slice(idx + 1)
+			];
 		
 		default:
 			return state.notify;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Editor, EditorState, RichUtils, CompositeDecorator, convertToRaw, convertFromRaw } from 'draft-js';
 import { getSelectionRange, getSelectionCoords } from './utils';
 import InlineToolbar from './InlineToolbar';
@@ -6,22 +6,18 @@ import InlineToolbar from './InlineToolbar';
 import './draft-editor.css';
 
 
-const DraftEditor = ({onHandleChange, readOnly = false, content = {}}) => {
+const DraftEditor = ({onHandleChange, readOnly, content}) => {
+
+	let initialState;
+	if(content) {
+		if(!content.hasOwnProperty('entityMap')) content.entityMap = {};
+		initialState = EditorState.createWithContent(convertFromRaw(content), decorator);
+	} else {
+		initialState = EditorState.createEmpty(decorator);
+	}
 	 
-	const [editorState, setEditorState] = useState(	EditorState.createEmpty(decorator) );
+	const [editorState, setEditorState] = useState(	initialState );
 	const [inlineToolbar, setInlineToolbar] = useState({ show: false });
-
-
-	useEffect(() => {
-		if(content.hasOwnProperty('blocks')) {
-
-			if(!content.hasOwnProperty('entityMap')) content.entityMap = {};
-
-			setEditorState(EditorState.createWithContent(convertFromRaw(content), decorator));
-		}
-	}, [content]);
-
-
 
 	const onChange = (editorState) => {
 
@@ -116,6 +112,10 @@ const DraftEditor = ({onHandleChange, readOnly = false, content = {}}) => {
 			</div>
 		</div>
 	);
+}
+DraftEditor.defaultProps = {
+	content: null,
+	readOnly: false
 }
 const customStyleMap = {
 	HIGHLIGHT: {

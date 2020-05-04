@@ -10,7 +10,8 @@ import TaskContainer from '../task';
 
 import ProjectListContainer from '../project-list';
 import ProjectContainer from '../project';
-import ProjectAddPage from '../project-add';
+import ProjectAddContainer from '../project-add';
+import ProjectEdit from '../project-edit';
 
 import Notification from '../notification';
 
@@ -50,12 +51,17 @@ export default class App extends Component {
 								
 							<Route
 								path="/project-add"
-								component={ProjectAddPage}
+								component={ProjectAddContainer}
 								exact />
 
 							<Route
+								exact
 								path="/project/:id"
 								component={ProjectContainer} />
+							<Route
+								exact
+								path="/project/:id/edit"
+								component={ProjectEdit} />
 							
 						</Switch>						
 						

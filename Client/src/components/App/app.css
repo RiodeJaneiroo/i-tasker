@@ -1,7 +1,16 @@
 body {
   font-size: 0.875rem;
 }
-
+.bDone {
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  padding: 30px;
+}
+.bDone img {
+  border: 1px solid #262a30;
+  margin-top: 40px;
+}
 .bIcon {
   display: flex;
   align-items: center;

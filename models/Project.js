@@ -11,7 +11,7 @@ const projectSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	projectUrl: String,
+	siteUrl: String,
 	body: Object,
 	projectId: Number
 })

@@ -1,30 +1,45 @@
-import React from 'react';
+import React, { Fragment }  from 'react';
 import * as Icon from 'react-feather';
+import DraftEditor from '../draft-editor';
+import { Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-const TaskBody = () => {
+const TaskBody = ({ listTask }) => {
+
+	const btnTodo = (
+		<Button variant="secondary" size="sm" className="bAddTask__done">
+			<Icon.Check size="18"/>
+		</Button>
+	);
+	const btnDone = <div className="btn btn-success disabled btn-sm bAddTask__done">Решено</div>;
+	
 	return (
-		<>
-		<div className="card rounded-0 mb-3 bAddTask__box">
-			<button type="button" className="btn btn-secondary btn-sm bAddTask__done">
-				<Icon.Check size="18"/>
-			</button>
-			<div className="card-body">
-				<h5 className="card-title">Special title treatment</h5>
-				<p className="card-text">Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!</p>
-				<p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-			</div>
-		</div>
-		<div className="card rounded-0 mb-3 bAddTask__box">
-			<div className="btn btn-success disabled btn-sm bAddTask__done">Решено</div>
-			<div className="card-body">
-				<h5 className="card-title">Special title treatment</h5>
-				<p className="card-text">Доработка таблицы - Вадим нужно сделать, если сможешь кого то давай привлечем!!</p>
-				<p className="card-text">With supporting text below as a natural lead-in to additional content.</p>
-			</div>
-		</div>
-		<hr className="mt-5"/>
-		</>
+		<Fragment >
+			{
+				listTask.map((el, idx) => {
+					if(el.hasOwnProperty('editor')) {
+						let button;
+						if(el.done) {
+							button = <div className="btn btn-success disabled btn-sm bAddTask__done">Решено</div>;
+						} else {
+							button = <button type="button" className="btn btn-secondary btn-sm bAddTask__done"><Icon.Check size="18"/></button>;
+						}
+						return (
+							<div key={idx} className="card rounded-0 mb-3 bAddTask__box">
+								{ el.done ? btnDone : btnTodo }
+								<div className="card-body">
+								<DraftEditor content={el.editor} readOnly={true} />
+								</div>
+							</div>
+						)
+					}
+					return null;
+				})
+			}
+		</Fragment>
 	);
 };
-
+TaskBody.propTypes = {
+	listTask: PropTypes.arrayOf(PropTypes.object)
+}
 export default TaskBody;

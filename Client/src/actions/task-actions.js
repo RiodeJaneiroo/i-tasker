@@ -90,10 +90,8 @@ export const fetchTaskRemove = (dispatch, taskId) => {
 	
 	dispatch(taskRemoveRequest());
 	
-	taskService.removeTask(taskId)
-		.then(data => {		
-			dispatch(taskRemoveLoaded(data.task._id))
-		})
+	return taskService.removeTask(taskId)
+		.then(data => dispatch(taskRemoveLoaded(data.task._id)))
 		.catch((error) => dispatch(taskRemoveError(error)));
 }
 

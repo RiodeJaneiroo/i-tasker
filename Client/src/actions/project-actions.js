@@ -52,7 +52,7 @@ export const fetchProject = (dispatch, projectId) => {
 		.catch((error) => dispatch(projectError(error)));
 }
 
-export const fetchProjectAdd = (project) => (dispatch) =>  {
+export const fetchProjectAdd = (dispatch, project) => {
 	dispatch(projectAddRequest());
 	projectService.projectAdd(project)
 		.then((data) => {

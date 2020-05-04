@@ -2,14 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Alert } from 'react-bootstrap';
 
-const Notification = () => {
+import "./notification.css";
 
-	const notify = useSelector(state => state.notify);
+const Notification = () => {
+	let notify = useSelector(state => state.notify);
 
 	return (
 		<div className="bNotify">
 			{
-				notify.map(el => <Alert variant={el.type}>{el.text}</Alert>)
+				notify.map(({ id, type = "success", text }) => <Alert key={id} variant={type}>{text}</Alert>)
 			}
 		</div>
 	)

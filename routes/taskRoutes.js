@@ -23,9 +23,13 @@ module.exports = (app) => {
 			let taskOne = await Task.findOne({_id: id});
 		
 			if(taskOne) {
-				let project = await Project.findOne({_id: taskOne.projectId});				
-				const {_id, title, projectId, createAt, modifyAt, content} = taskOne;
-
+				let projectInfo = await Project.findOne({_id: taskOne.projectId});				
+				const {_id, title, projectId, createAt, modifyAt, listTask} = taskOne;
+				
+				let project = projectInfo ? 
+					{ url: projectInfo.siteUrl, title: projectInfo.title } 
+					: null;
+			
 				return res.status(201).send({
 					error: false,
 					task: {
@@ -33,12 +37,9 @@ module.exports = (app) => {
 						title,
 						projectId,
 						createAt,
-						content,
+						listTask,
 						modifyAt,
-						project: {
-							url: project.projectUrl,
-							title: project.title
-						}
+						project
 					}
 				}); 
 			} else {
@@ -47,7 +48,6 @@ module.exports = (app) => {
 				});
 			}
 		} catch (error) {
-			console.log(error);
 			return res.status(400).send({
 				error: true
 			});
@@ -67,11 +67,17 @@ module.exports = (app) => {
 
 	app.delete(`/api/task/:id`, async (req, res) => {
 		const { id } = req.params;
-		let task = await Task.findByIdAndDelete(id);
+		try {
+			let task = await Task.findByIdAndDelete(id);
 
-		return res.status(202).send({
-			error: false,
-			task
-		});
+			return res.status(202).send({
+				error: false,
+				task
+			});
+		} catch (err) {
+			return res.status(400).send({
+				error: true
+			});
+		}
 	});
 }

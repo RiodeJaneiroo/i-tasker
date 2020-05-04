@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-
+import React, {  useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchTask } from '../../actions/task-actions';
 import { Link } from 'react-router-dom';
@@ -8,17 +8,16 @@ import ErrorIndicator from '../error-indicator';
 import TaskControl from '../task-control';
 import { formatDate } from '../../utils';
 import * as Icon from 'react-feather';
-import { Table, Spinner, Alert } from 'react-bootstrap';
+import { Table, Spinner } from 'react-bootstrap';
 import TaskFooter from './task-footer';
 import TaskBody from './task-body';
-import DraftEditor from '../draft-editor';
 
 
 import './task.css';
 
 const Task = ({ task }) => {
-	const { title, createAt, modifyAt, projectId, content, project, _id } = task;
-
+	const { title, createAt, modifyAt, projectId, listTask, project, _id } = task;
+	
 	return (
 		<div className="row">
 			<div className="col-12">
@@ -28,9 +27,10 @@ const Task = ({ task }) => {
 				</div>
 			</div>
 			<div className="col-8">
-				<DraftEditor content={content} readOnly={true} />
+				{ listTask && <TaskBody listTask= {listTask}/> }
+				<hr className="mt-5"/>
 				<TaskFooter />
-				<TaskBody />
+				
 			</div>
 			<div className="col-4">
 				<Table striped bordered hover variant="dark">
@@ -43,16 +43,18 @@ const Task = ({ task }) => {
 							<td>Важность:</td>
 							<td><span role="img" aria-label="fire">🔥 🔥 🔥</span></td>
 						</tr>
-						<tr>
-							<td>Проект:</td>
-							<td>
-								<Link to={`/project/${projectId}`}>{project.title}</Link>
+						{ project &&
+							<tr>
+								<td>Проект:</td>
+								<td>
+									<Link to={`/project/${projectId}`}>{project.title}</Link>
 
-								<a rel="noopener noreferrer" target="_blank" className="externalLinkProject" href={project.url}>
-									<Icon.ExternalLink size="18" />
-								</a>
-							</td>
-						</tr>
+									<a rel="noopener noreferrer" target="_blank" className="externalLinkProject" href={project.url}>
+										<Icon.ExternalLink size="18" />
+									</a>
+								</td>
+							</tr>
+						}
 						<tr>
 							<td>Создано:</td>
 							<td>{formatDate(createAt)}</td>
@@ -67,14 +69,18 @@ const Task = ({ task }) => {
 		</div>
 	);
 };
-const TaskContainer = ({ match, location }) => {
+Task.propTypes = {
+	task: PropTypes.object.isRequired
+}
+
+const TaskContainer = ({ match }) => {
 
 	const dispatch = useDispatch();
 	const { item, loading, error } = useSelector(state => state.task);
 
 	useEffect(() => {
 		const { id } = match.params;
-		fetch(dispatch, id);
+		fetchTask(dispatch, id);
 	}, [dispatch, match.params]);
 
 

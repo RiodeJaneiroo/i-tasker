@@ -6,24 +6,34 @@ This is a task manager for small team.
 ### Structure app
 
 ```
-├── index.js
 ├── client
 │   ├── public
 │   └── src
-│       ├── store.js
-│       ├── index.js
 │       ├── actions
 │       ├── components
+│       │   ├── App
+│       │   ├── draft-editor
+│       │   ├── error-indicator
+│       │   ├── header
+│       │   ├── notification
+│       │   ├── project
+│       │   ├── project-add
+│       │   ├── project-edit
+│       │   ├── project-form
+│       │   ├── project-list
+│       │   ├── project-list-item
+│       │   ├── sidebar
+│       │   ├── task
+│       │   ├── task-add
+│       │   ├── task-control
+│       │   ├── task-list
+│       │   └── task-list-item
+│       ├── custom-hooks
 │       ├── reducers
 │       ├── services
 │       └── utils
 ├── models
-│   ├── Project.js
-│   ├── Task.js
-│   └── User.js
 └── routes
-    ├── projectRoutes.js
-    └── taskRoutes.js
 ```
 
 ### Using libs

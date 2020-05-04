@@ -7,9 +7,9 @@ const taskSchema = new Schema({
 		type: String,
 		required: true
 	},
-	content: {
-		type: Object
-	},
+	listTask: [
+		{ id: Number, done: Boolean, editor: Object }
+	],
    createAt: {
 		type: Date,
 		default: Date.now
